@@ -7,7 +7,7 @@ This repo provides you the resources to successfully coach hackathons. It contai
 - How to deliver a hackathon
 - Coaching best practices
 - Coach's guides for each hackathon
-- Technical resources to prepare for eaach hackathon challenge
+- Technical resources to prepare for each hackathon challenge
 
 ## Where to begin
 
