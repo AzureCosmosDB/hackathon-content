@@ -1,3 +1,5 @@
 # Hackathon guides
 
 This directory contains folders for each hackathon, along with solutions, hints, and technical resources for each challenge.
+
+- [Build and Modernize AI Applications Hackathon](build-modern-ai-apps/README.md)
