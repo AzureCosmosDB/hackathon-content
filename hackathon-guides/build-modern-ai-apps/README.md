@@ -1,5 +1,7 @@
 # Coaches Guide - Build Modern AI Apps Hackathon
 
+This is the coach's guide for the [Build Modern AI Apps hackathon](https://github.com/Azure/Build-Modern-AI-Apps-Hackathon).
+
 ## An introduction for coaches
 
 A hackathon is a hands-on experience in which participants work in team to solve a
