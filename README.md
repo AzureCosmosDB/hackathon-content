@@ -1,6 +1,6 @@
 # Hackathon content
 
-Thank you for your interest in coaching the intelligent application series of hackathons. You are integral to the success of the hackathons and we appreciate your time and effort.
+Thank you for your interest in coaching the Build & Modernize AI Application series of hackathons. You are integral to the success of the hackathons and we appreciate your time and effort.
 
 This repo provides you the resources to successfully coach hackathons. It contains the following:
 
@@ -11,4 +11,6 @@ This repo provides you the resources to successfully coach hackathons. It contai
 
 ## Where to begin
 
-Start by reading the [coaching guide](coaching/README.md). It contains information on how to prepare for a hackathon, your role as a coach, and how to deliver a hackathon.
+Start by reading the [coaching guide](./coaching-guide/README.md). It contains information on how to prepare for a hackathon, your role as a coach, and how to deliver a hackathon.
+
+From there go to the [Hackathon Guide Readme](./hackathon-guides/README.md) to navigate into each of the hackathon content for coaches.

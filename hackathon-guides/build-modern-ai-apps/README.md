@@ -42,7 +42,7 @@ So what *is* expected of a coach?
     successes along the way!
 
 > [!NOTE]
-> For more coach guidance, see the [Coaching Guide](coaching/README.md).
+> For more coach guidance, see the [Coaching Guide](/coaching-guide/README.md).
 
 ## Preparing to Coach the Build Modern AI Apps Hackathon
 
@@ -51,12 +51,30 @@ fully prepared.
 
 ### 1. Build Foundational Knowledge
 
-Coaches for the Build Modern AI Apps hackathon require knowledge about Azure Cosmos DB,
-vector databases, RAG patterns, event sourcing, embedding, Azure OpenAI, application
+Coaches for the Build & Modernize AI Apps hackathon require knowledge about Azure Cosmos DB, vector databases, RAG patterns, event sourcing, embedding, Azure OpenAI, application 
 development, and orchestration using Semantic Kernel. There is a lot to cover!
 
-- Start by reading about [embeddings](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings), [Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db/), [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview), and [Azure Cognitive Search](https://learn.microsoft.com/azure/search/).
-- Get your head around [prompt engineering](https://learn.microsoft.com/semantic-kernel/overview/) and [effective system prompts](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/system-message), which are both key to the hackathon.
+You should read and understand the following services and concepts:
+
+Services:
+
+- [Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db/)
+- [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview)
+- [Azure Cognitive Search](https://learn.microsoft.com/azure/search/)
+
+Concepts:
+- [Embeddings](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings)
+- [Prompt engineering](https://learn.microsoft.com/semantic-kernel/overview/)
+- [Effective system prompts](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/system-message)
+
+Most importantly, you need to fully understand the solution accelerator, what it does and how it works.
+
+- [Watch the Deep Dive Video](https://youtu.be/YUE58UbmTOI)
+- [Clone and get the solution setup and working](https://github.com/Azure/Vector-Search-AI-Assistant/tree/cognitive-search-vector) You may want to do this in advance of watching the video so you can follow along during the video.
+
+There is also content which you can use to redeliver the deep dive video yourself including:
+- [Deep Dive PowerPoint Presentation](./deep-dive/Build_Modern_AI_Apps_Solution_Deep_Dive.pptx) includes complete talk track
+- [Deep Dive Demo Script](./deep-dive/BuildModernAIAppsDeepDiveScript.docx) includes EVERYTHING else you need to deliver this session.
 
 ### 2. Complete the Hackathon Challenges
 
