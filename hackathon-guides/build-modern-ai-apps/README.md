@@ -73,7 +73,7 @@ Most importantly, you need to fully understand the solution accelerator, what it
 - [Clone and get the solution setup and working](https://github.com/Azure/Vector-Search-AI-Assistant/tree/cognitive-search-vector) 
 
 There is also content which you can use to redeliver the deep dive video yourself including:
-- [Deep Dive PowerPoint Presentation](./deep-dive/Build_Modern_AI_Apps_Solution_Deep_Dive.pptx) includes complete talk track
+- [Deep Dive PowerPoint Presentation](./deep-dive/Build_Modern_AI_Apps_Solution_Deep_Dive.pptx) and includes talk track
 - [Deep Dive Demo Script](./deep-dive/BuildModernAIAppsDeepDiveScript.docx) includes EVERYTHING else you need to deliver this session.
 
 ### 2. Complete the Hackathon Challenges
@@ -85,14 +85,14 @@ that the participants will have, but you can also use the notes in
 the rest of this guide for more detailed information and context that may
 help you coach your team during the hackathon event itself.
 
-> **Note**: If a **solutions** folder is provided for this hackathon,
+> **Note**: If a **code** folder is provided for a challenge,
 > these solutions were used to validate the challenges.
 > Obviously, you might find this useful; but we encourage you to try to
 > *solve the challenges for yourself before referring to the solutions*.
 >
-> The **solutions** folder includes solutions for paths that we anticipate
+> The **code** folder includes a solution for paths that we anticipate
 > being the most common choices. As a coach, you must allow a team to choose
-> alternative paths, if the success criteria is met. It is **not** expected
+> alternative ways to complete a challenge, if the success criteria is met. It is **not** expected
 > that a coach will have deep expertise in all possible paths, nor expert
 > level command of all possible syntax. Coaches can lean on each other for
 > help if a team chooses a less familiar path. If no coach has experience with
@@ -110,7 +110,7 @@ ensure your team has a positive and successful hackathon experience.
 
 ## Challenge Guidance
 
-The rest of this document provides guidance for helping your team as they work
+The rest of this content in this folder provides guidance for helping your team as they work
 through the challenges.
 
 ### General Expectations
