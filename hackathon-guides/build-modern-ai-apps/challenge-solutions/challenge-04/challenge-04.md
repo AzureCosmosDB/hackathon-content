@@ -1,5 +1,9 @@
 # Solution for Challenge 04
 
+
+[Watch the Train the Trainer video for Challenge 4](https://aka.ms/vsaia.hack.ttt.04)
+[Deck for the Challenge](Challenge%204.pptx)
+
 ## Create and load new data
 
 1. Download the original data files from either `https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/product.json` or `https://cosmosdbcosmicworks.blob.core.windows.net/cosmic-works-small/customer.json` to your local machine.
