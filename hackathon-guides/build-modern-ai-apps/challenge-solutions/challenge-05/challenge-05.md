@@ -1,5 +1,9 @@
 # Solution for Challenge 05
 
+
+[Watch the Train the Trainer video for Challenge 5](https://aka.ms/vsaia.hack.ttt.05)
+[Deck for the Challenge](Challenge%205.pptx)
+
 1. Create the `campaign` container in Cosmos DB. Use default settings for the container and a partition key of `/campaignId`.
 2. Add the `Campaign` class to the `VectorSearchAiAssistant.Service` project under `Models/Search`.
 3. Add the new entity to the model registry in `ModelRegistry.cs` in the `VectorSearchAiAssistant.Service` project, under the `Models` folder. For more details, see [Solution notes](../../solution-notes.md).

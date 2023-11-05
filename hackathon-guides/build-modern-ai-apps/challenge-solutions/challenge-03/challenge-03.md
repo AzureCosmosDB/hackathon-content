@@ -1,5 +1,8 @@
 # Solution for Challenge 03
 
+[Watch the Train the Trainer video for Challenge 3](https://aka.ms/vsaia.hack.ttt.03)
+[Deck for the Challenge](Challenge%203.pptx)
+
 1. `ChatBuilder.cs`
 
 The `WithMemories` method populates the `_memories` private property in `ChatBuilder`. It uses `EmbeddingUtility.Transform` to get the text representation of the entities in the memories. The `Transform` method uses the `ModelRegistry` to determine the type of the entity and the `EmbeddingField` attribute to determine the prefix used when serializing the property value to text. The `ModelRegistry` is also used to determine the name of the entity, using the `NamingProperties` attribute. For more details, see [Solution notes](../../solution-notes.md)

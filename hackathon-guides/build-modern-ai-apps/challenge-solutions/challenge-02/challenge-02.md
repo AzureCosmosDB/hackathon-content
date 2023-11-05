@@ -1,7 +1,7 @@
 # Solution for Challenge 02
 
-[Watch the Train the Trainer video for Challenge 2](https://youtu.be/bRhsjqnrhKs)
-
+[Watch the Train the Trainer video for Challenge 2](https://aka.ms/vsaia.hack.ttt.02)
+[Deck for the Challenge](Challenge%202.pptx)
 
 1. `AzureCognitiveSearchVectorMemory.cs`
 

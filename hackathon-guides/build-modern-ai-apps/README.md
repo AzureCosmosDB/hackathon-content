@@ -1,6 +1,6 @@
 # Coaches Guide - Build Modern AI Apps Hackathon
 
-This is the coach's guide for the [Build Modern AI Apps hackathon](https://github.com/Azure/Build-Modern-AI-Apps-Hackathon).
+Coach's guide for delivering the [Build Modern AI Apps hackathon](https://github.com/Azure/Build-Modern-AI-Apps-Hackathon).
 
 ## An introduction for coaches
 
@@ -69,8 +69,8 @@ Concepts:
 
 Most importantly, you need to fully understand the solution accelerator, what it does and how it works.
 
-- [Watch the Deep Dive Video](https://youtu.be/YUE58UbmTOI)
-- [Clone and get the solution setup and working](https://github.com/Azure/Vector-Search-AI-Assistant/tree/cognitive-search-vector) You may want to do this in advance of watching the video so you can follow along during the video.
+- [Watch the Deep Dive Video](https://aka.ms/vsaia.deepdive) You may want to watch this video up through the installation section, then follow along for the remainder of the video as we go through the source code for this solution.
+- [Clone and get the solution setup and working](https://github.com/Azure/Vector-Search-AI-Assistant/tree/cognitive-search-vector) 
 
 There is also content which you can use to redeliver the deep dive video yourself including:
 - [Deep Dive PowerPoint Presentation](./deep-dive/Build_Modern_AI_Apps_Solution_Deep_Dive.pptx) includes complete talk track
