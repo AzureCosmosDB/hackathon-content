@@ -14,5 +14,5 @@ As part of the deployment, the team should have created a Synapse workspace. The
 
 Ultimately, they should execute the pipeline to load the data into the Azure Cosmos DB containers. The execution time should not exceed 5 minutes.
 
-> [!TIP]
+> [!NOTE]
 > Allow the team to figure this out on their own. The instructins they see within Challenge 02 doe not explicitly tell them to load data using Synapse Analytics, though there is a link to learn more about Synapse Analytics pipelines under the Resources section. If they are stuck, you can point them to the Synapse Analytics workspace and the pipeline.
