@@ -2,6 +2,338 @@
 
 As the team evaluates the solution features, they should walk through the functionality of the web application. They will need to run the React application locally several times as they work through the code completion challenges. They will also need to be able to run the entire solution locally to test their changes before deploying them to Azure.
 
+## Code completion challenges
+
+### CosmosDbChangeFeedService.cs
+
+```csharp
+private async Task AssignClaimAdjudicatorChangeFeedHandler(
+    ChangeFeedProcessorContext context,
+    IReadOnlyCollection<ClaimHeader> input,
+    CancellationToken cancellationToken)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+    using var logScope = _logger.BeginScope("CosmosDbTrigger: AssignClaimAdjudicator");
+
+    // Get all claims that has initial status.
+    var items = input.Where(i => i.Type == ClaimHeader.EntityName &&
+                                 i.ClaimStatus is ClaimStatus.Initial or ClaimStatus.Resubmitted or ClaimStatus.Proposed);
+
+    foreach (var doc in items)
+    {
+        _logger.LogInformation("Processing document " + doc.Id);
+
+        // Get claim detail to update.
+        var claim = await _claimRepository.GetClaim(doc.ClaimId, doc.AdjustmentId);
+        if (claim == null) throw new ArgumentException($"Claim '{doc.ClaimId}' missing", nameof(doc.ClaimId));
+
+        claim.ModifiedBy = "ChangeFeed/Adjudication";
+
+        switch (doc.ClaimStatus)
+        {
+            case ClaimStatus.Initial:
+            case ClaimStatus.Resubmitted:
+            {
+                // Assign claim to an adjudicator based on business rule.
+                claim = await _coreBusinessRule.AssignClaim(claim);
+                break;
+            }
+
+            case ClaimStatus.Proposed:
+            {
+                // Adjudicate claim.
+                //Create a copy of the claim and name it as "Proposed" claim.
+                var proposedClaim = new ClaimHeader(claim);
+                // TODO: Following the same pattern as above for Resubmitted claims, uncomment and complete the following line to adjudicate the claim.
+                (claim, var adjudicatorChanged) = await _coreBusinessRule.AdjudicateClaim(claim);
+                // TODO: Uncomment and complete the following lines to raise an Event Hub event for the adjudicator change, passing in the proposedClaim as the event payload:
+                if (adjudicatorChanged)
+                {
+                    // Raise event to notify adjudicator change.
+                    await _eventHub.TriggerEventAsync(proposedClaim, Constants.EventHubTopics.AdjudicatorChanged);
+                }
+                break;
+            }
+        }
+
+        // Update claim header and details in Claim container.
+        await _claimRepository.UpdateClaim(claim);
+    }
+}
+```
+
+```csharp
+private async Task ClaimCompleteChangeFeedHandler(
+    ChangeFeedProcessorContext context,
+    IReadOnlyCollection<ClaimDetail> input,
+    CancellationToken cancellationToken)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+    using var logScope = _logger.BeginScope("CosmosDbTrigger: ClaimComplete");
+
+    try
+    {
+        foreach (var claim in input.Where(c =>
+                     c.Type == ClaimDetail.EntityName &&
+                     c.ClaimStatus is ClaimStatus.Approved or ClaimStatus.Denied))
+        {
+            switch (claim.ClaimStatus)
+            {
+                case ClaimStatus.Approved:
+                    //TODO: Increment the member totals by calling a method on the Member repository.
+                    //      Pass to the method the MemberId, a count of 1, and the total amount from the claim.
+                    await _memberRepository.IncrementMemberTotals(claim.MemberId, 1, claim.TotalAmount);
+                    await _eventHub.TriggerEventAsync(claim, Constants.EventHubTopics.Approved);
+                    break;
+                case ClaimStatus.Denied:
+                    await _eventHub.TriggerEventAsync(claim, Constants.EventHubTopics.Denied);
+                    break;
+            }
+
+            _logger.LogInformation($"Claim {claim.ClaimId} published to EventHub/{claim.ClaimStatus}");
+        }
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, $"Failed to publish ClaimComplete events");
+        throw;
+    }
+}
+```
+
+```csharp
+private async Task ClaimUpdatedChangeFeedHandler(
+    ChangeFeedProcessorContext context,
+    IReadOnlyCollection<ClaimHeader> input,
+    CancellationToken cancellationToken)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+    using var logScope = _logger.BeginScope("CosmosDbTrigger: ClaimUpdated");
+
+    var headers = input.Where(i => i.Type == ClaimHeader.EntityName);
+
+    foreach (var claim in headers)
+    {
+        if (!string.IsNullOrEmpty(claim.MemberId))
+        {
+            // TODO: Upsert the claim in the Member repository.
+            await _memberRepository.UpsertClaim(claim);
+            _logger.LogInformation($"Updating ClaimHeader/{claim.ClaimId}/{claim.AdjustmentId} for Member/{claim.MemberId}");
+        }
+
+        if (!string.IsNullOrEmpty(claim.AdjudicatorId))
+        {
+            // TODO: Upsert the claim in the Adjudicator repository.
+            await _adjudicatorRepository.UpsertClaim(claim);
+            _logger.LogInformation($"Updating ClaimHeader/{claim.ClaimId}/{claim.AdjustmentId} for Adjudicator/{claim.AdjudicatorId}");
+        }
+    }
+}
+```
+
+### CoreBusinessRule.cs
+
+```csharp
+public async Task<ClaimDetail> AssignClaim(ClaimDetail claim)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+
+    // If claim has no member, set status to Pending.
+    if (string.IsNullOrEmpty(claim.MemberId))
+    {
+        claim.ClaimStatus = ClaimStatus.Pending;
+        return claim;
+    }
+
+    // Check if member has active coverage.
+    // If member has active coverage, check if claim is still covered based on dates.
+    // If claim is not valid, set status to Rejected.
+    var coverages = await _memberRepository.GetMemberCoverage(claim.MemberId);
+    if (!coverages.Any(c => c.StartDate <= claim.FilingDate && c.EndDate >= claim.FilingDate))
+    {
+        claim.ClaimStatus = ClaimStatus.Denied;
+        claim.Comment = "[Automatic] Rejected: Coverage expired or missing";
+        return claim;
+    }
+
+    // If claim's total amount is less than 200, set status to Approved.
+    // TODO: If the claim's TotalAmount value is less than the AutoApproveThreshold in the BusinessRulesOptions,
+    //       set the claim status to Approved and return the claim.
+    if (claim.TotalAmount < _options.Value.AutoApproveThreshold)
+    {
+        claim.ClaimStatus = ClaimStatus.Approved;
+        claim.Comment = $"[Automatic] Approved: Less than threshold of {_options.Value.AutoApproveThreshold}";
+        return claim;
+    }
+
+    // Select random adjudicator.
+    if (string.IsNullOrEmpty(claim.AdjudicatorId))
+    {
+        Adjudicator adjudicator;
+        if (_options.Value.DemoMode)
+        {
+            var demoAdjudicatorId = _options.Value.DemoAdjudicatorId;
+            var demoManagerAdjudicatorId = _options.Value.DemoManagerAdjudicatorId;
+
+            if (!string.IsNullOrWhiteSpace(demoAdjudicatorId) && !string.IsNullOrWhiteSpace(demoManagerAdjudicatorId))
+            {
+                var randomIndex = random.Next(0, 2);
+
+                var selectedAdjudicatorId = randomIndex == 0 ? demoAdjudicatorId : demoManagerAdjudicatorId;
+
+                adjudicator = await _adjudicatorRepository.GetAdjudicator(selectedAdjudicatorId) ?? await _adjudicatorRepository.GetRandomAdjudicator();
+            }
+            else if (!string.IsNullOrWhiteSpace(demoAdjudicatorId))
+            {
+                adjudicator = await _adjudicatorRepository.GetAdjudicator(demoAdjudicatorId) ?? await _adjudicatorRepository.GetRandomAdjudicator();
+            }
+            else if (!string.IsNullOrWhiteSpace(demoManagerAdjudicatorId))
+            {
+                adjudicator = await _adjudicatorRepository.GetAdjudicator(demoManagerAdjudicatorId) ?? await _adjudicatorRepository.GetRandomAdjudicator();
+            }
+            else
+            {
+                adjudicator = await _adjudicatorRepository.GetRandomAdjudicator();
+            }
+        }
+        else
+        {
+            adjudicator = await _adjudicatorRepository.GetRandomAdjudicator();
+        }
+        
+        if (adjudicator != null)
+        {
+            // Set Adjudicator to the claim and set status to Assigned.
+            claim.AdjudicatorId = adjudicator.AdjudicatorId;
+            claim.ClaimStatus = ClaimStatus.Assigned;
+            claim.Comment = $"[Automatic] Assigned: Automatically assigned to Adjudicator {adjudicator.AdjudicatorId} ({adjudicator.Role})";
+        }
+    }
+
+    return claim;
+}
+```
+
+```csharp
+public async Task<(ClaimDetail, bool)> AdjudicateClaim(ClaimDetail claim)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+
+    // TODO: Retrieve the Adjudicator from the AdjudicatorRepository based on the AdjudicatorId assigned to the claim:
+    var adjudicator = await _adjudicatorRepository.GetAdjudicator(claim.AdjudicatorId);
+    var adjudicatorChanged = false;
+
+    // TODO: Check if the adjudicator has a Manager role. If so, set status to Approved, add a comment to the claim, and return the claim and adjudicatorChanged values.
+    if (adjudicator?.Role == AdjudicatorRole.Manager)
+    {
+        claim.ClaimStatus = ClaimStatus.Approved;
+        claim.Comment = "[Automatic] Approved: Manager Proposed adjustment";
+        return (claim, adjudicatorChanged);
+    }
+
+    if (claim.LastAmount.HasValue)
+    {
+        // TODO: Check if the difference between the LastAmount and TotalAmount is less than or equal to the RequireManagerApproval threshold.
+        // If so, set status to Approved, add a comment to the claim, and return the claim and adjudicatorChanged values.
+        decimal difference = Math.Abs(claim.LastAmount.Value - claim.TotalAmount);
+        if (difference <= _options.Value.RequireManagerApproval)
+        {
+            claim.ClaimStatus = ClaimStatus.Approved;
+            claim.Comment = $"[Automatic] Approved: Proposed adjustment below approval threshold {_options.Value.RequireManagerApproval}";
+            return (claim, adjudicatorChanged);
+        }
+    }
+
+    Adjudicator manager;
+    if (_options.Value.DemoMode && !string.IsNullOrWhiteSpace(_options.Value.DemoManagerAdjudicatorId))
+    {
+        // TODO: If DemoMode is enabled and a DemoManagerAdjudicatorId is set, retrieve the Adjudicator from the AdjudicatorRepository based on the DemoManagerAdjudicatorId:
+        manager = await _adjudicatorRepository.GetAdjudicator(_options.Value.DemoManagerAdjudicatorId) ?? await _adjudicatorRepository.GetRandomAdjudicator("Manager");
+    }
+    else
+    {
+        // TODO: Retrieve a random Adjudicator from the AdjudicatorRepository with a role of "Manager":
+        manager = await _adjudicatorRepository.GetRandomAdjudicator("Manager");
+    }
+    
+    // TODO: If a manager was found, set the claim's PreviousAdjudicatorId to the claim's AdjudicatorId, set the claim's AdjudicatorId to the manager's AdjudicatorId,
+    if (manager == null)
+        throw new NullReferenceException("Unable to find an appropriate manager to assign approval to");
+
+    claim.PreviousAdjudicatorId = claim.AdjudicatorId;
+    claim.AdjudicatorId = manager.Id;
+    claim.ClaimStatus = ClaimStatus.ApprovalRequired;
+    claim.Comment = "[Automatic] Reassigned: Adjustment requires manager approval";
+
+    adjudicatorChanged = claim.PreviousAdjudicatorId != claim.AdjudicatorId;
+
+    return (claim, adjudicatorChanged);
+}
+```
+
+### MemberRepository.cs
+
+```csharp
+public async Task<Member> IncrementMemberTotals(string memberId, int count, decimal amount)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+    var response = await Container.PatchItemAsync<Member>(memberId, new PartitionKey(memberId),
+        patchOperations: new[]
+        {
+            // TODO: Increment the approvedCount and approvedTotal properties with patch operations.
+            //       Convert the amount to a double using the decimal.ToDouble method.
+            PatchOperation.Increment("/approvedCount", count),
+            PatchOperation.Increment("/approvedTotal", decimal.ToDouble(amount)),
+            PatchOperation.Replace("/modifiedBy", "System/IncrementTotals"),
+            PatchOperation.Replace("/modifiedOn", DateTime.UtcNow), 
+        });
+
+    return response.Resource;
+}
+```
+
+### ClaimRepository.cs
+
+```csharp
+public async Task<ClaimHeader> CreateClaim(ClaimDetail detail)
+{
+    /* TODO: Challenge 3.
+    * Uncomment and complete the following lines as instructed.
+    */
+    detail.CreatedOn = detail.ModifiedOn = DateTime.UtcNow;
+
+    var header = new ClaimHeader(detail);
+
+    // TODO: Create a transactional batch to create the header and detail items.
+    var batch = Container.CreateTransactionalBatch(new PartitionKey(detail.ClaimId));
+    batch.CreateItem(header);
+    batch.CreateItem(detail);
+
+    // TODO: Uncomment the following lines.
+    using (var response = await batch.ExecuteAsync())
+    {
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(response.ErrorMessage); // TODO: Better than this
+        }
+
+        return response.GetOperationResultAtIndex<ClaimHeader>(0).Resource;
+    };
+}
+```
+
 ## Running the solution locally
 
 The following steps will help the team run the React application locally:
