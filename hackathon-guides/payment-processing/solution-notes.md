@@ -14,7 +14,6 @@ Once the solution is deployed, the architecture should look like the above diagr
 - All data is stored in Azure Cosmos DB. The background worker service acts as the Azure Cosmos DB change feed processor, which executes as data within the monitored Cosmos DB containers are inserted or updated, allowing for the application of business rules and automated updating of data within various containers. For this architecture, a CQRS pattern is in place to allow independent scalability between writes (new transactions) and reads (balances or statement queries) and Azure Cosmos DB change feed is the key to replicate data between containers.
 - There is an Azure OpenAI deployment that provides a completion model, orchestrated by Semantic Kernel. This enables users to ask questions about transactions in an account.
 
-
 ## Running the solution locally
 
 Before you can successfully run the solution locally, you need to do the following:
