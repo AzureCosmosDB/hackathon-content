@@ -58,6 +58,8 @@ Semantic Kernel. There is a lot to cover!
 - Start by reading about [Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db/), [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview), [Integrate with Azure Synapse Analytics pipelines](https://learn.microsoft.com/azure/synapse-analytics/get-started-pipelines), and [Semantic Kernel](https://learn.microsoft.com/semantic-kernel/overview/).
 - Get your head around [prompt engineering](https://learn.microsoft.com/semantic-kernel/overview/) and [effective system prompts](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/system-message), which are both key to the hackathon.
 
+> Watch the [solution deep dive walkthrough video](https://www.dropbox.com/scl/fi/iwf2tr8um2m7ok7ly4sfb/Medical-Claims-Handling-deep-dive.mp4?rlkey=k7abbcvrn2x8nm7zyxf87zxuo&dl=0) to get a better understanding of the architecture, source code, and application flow. Please do not share this video with attendees.
+
 ### 2. Complete the Hackathon Challenges
 
 Ideally, you should attend the hackathon as a participant before coaching
