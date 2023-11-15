@@ -53,7 +53,7 @@ namespace VectorSearchAiAssistant.Service.Models
                     new ModelRegistryEntry
                     {
                         Type = typeof(Campaign),
-                        TypeMatchingProperties = new List<string> { "name", "description" },
+                        TypeMatchingProperties = new List<string> { "campaignName", "campaignDescription" },
                         NamingProperties = new List<string>() { "campaignId" }
                     }
                 }
