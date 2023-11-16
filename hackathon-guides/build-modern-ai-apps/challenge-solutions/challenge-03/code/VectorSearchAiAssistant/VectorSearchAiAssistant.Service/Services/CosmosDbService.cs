@@ -197,8 +197,7 @@ namespace VectorSearchAiAssistant.Service.Services
                         // set the vector property on the entity.
                         await _ragService.AddMemory(
                             entity,
-                            string.Join(" ", entity.GetPropertyValues(typeMetadata.NamingProperties)),
-                            (e, v) => { (e as EmbeddedEntity).vector = v; });
+                            string.Join(" ", entity.GetPropertyValues(typeMetadata.NamingProperties)));
                     }
                 }
                 catch (Exception ex)
