@@ -12,7 +12,7 @@ namespace VectorSearchAiAssistant.Service.Models.Search
 {
     public class Campaign : EmbeddedEntity
     {
-        [SearchableField(IsKey = true, IsFilterable = true)]
+        [SearchableField(IsFilterable = true)]
         public string campaignId { get; set; }
 
         [SimpleField]
