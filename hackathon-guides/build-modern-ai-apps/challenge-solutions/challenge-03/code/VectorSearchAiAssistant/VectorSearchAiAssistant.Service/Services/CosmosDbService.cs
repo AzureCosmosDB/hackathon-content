@@ -11,6 +11,7 @@ using VectorSearchAiAssistant.Service.Models;
 using VectorSearchAiAssistant.Service.Utils;
 using System.Diagnostics;
 using Castle.Core.Resource;
+using VectorSearchAiAssistant.SemanticKernel.Models;
 
 namespace VectorSearchAiAssistant.Service.Services
 {
@@ -25,8 +26,10 @@ namespace VectorSearchAiAssistant.Service.Services
         private readonly Container _leases;
         private readonly Database _database;
         private readonly Dictionary<string, Container> _containers;
+        readonly Dictionary<string, Type> _memoryTypes;
 
         private readonly IRAGService _ragService;
+        private readonly ICognitiveSearchService _cognitiveSearchService;
         private readonly CosmosDbSettings _settings;
         private readonly ILogger _logger;
 
@@ -37,10 +40,12 @@ namespace VectorSearchAiAssistant.Service.Services
 
         public CosmosDbService(
             IRAGService ragService,
+            ICognitiveSearchService cognitiveSearchService,
             IOptions<CosmosDbSettings> settings, 
             ILogger<CosmosDbService> logger)
         {
             _ragService = ragService;
+            _cognitiveSearchService = cognitiveSearchService;
 
             _settings = settings.Value;
             ArgumentException.ThrowIfNullOrEmpty(_settings.Endpoint);
@@ -96,6 +101,8 @@ namespace VectorSearchAiAssistant.Service.Services
             _leases = database?.GetContainer(_settings.ChangeFeedLeaseContainer)
                 ?? throw new ArgumentException($"Unable to connect to the {_settings.ChangeFeedLeaseContainer} container required to listen to the CosmosDB change feed.");
 
+            _memoryTypes = ModelRegistry.Models.ToDictionary(m => m.Key, m => m.Value.Type);
+
             Task.Run(() => StartChangeFeedProcessors());
             _logger.LogInformation("Cosmos DB service initialized.");
         }
@@ -105,6 +112,9 @@ namespace VectorSearchAiAssistant.Service.Services
             /* TODO: Challenge 2.  
              * Uncomment and complete the following lines as instructed.
              */
+
+            _logger.LogInformation("Initializing the Cognitive Search index...");
+            await _cognitiveSearchService.Initialize(_memoryTypes.Values.ToList());
 
             _logger.LogInformation("Initializing the change feed processors...");
             _changeFeedProcessors = new List<ChangeFeedProcessor>();
@@ -146,6 +156,10 @@ namespace VectorSearchAiAssistant.Service.Services
             IReadOnlyCollection<dynamic> changes,
             CancellationToken cancellationToken)
         {
+            /* TODO: Challenge 2.  
+             * Uncomment and complete the following lines as instructed.
+             */
+            
             if (changes.Count == 0)
                 return;
 
@@ -170,6 +184,12 @@ namespace VectorSearchAiAssistant.Service.Services
                     else
                     {
                         var entity = jObject.ToObject(typeMetadata.Type);
+
+                        // TODO: Add the entity to the Cognitive Search content index and the Semantic Kernel memory
+
+                        // Add the entity to the Cognitive Search content index
+                        // The content index is used by the Cognitive Search memory source to run create memories from faceted queries
+                        await _cognitiveSearchService.IndexItem(entity);
 
                         // Add the entity to the Semantic Kernel memory used by the RAG service
                         // We want to keep the VectorSearchAiAssistant.SemanticKernel project isolated from any domain-specific

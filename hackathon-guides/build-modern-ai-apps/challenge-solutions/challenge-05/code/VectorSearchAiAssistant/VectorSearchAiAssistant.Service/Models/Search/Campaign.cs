@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using VectorSearchAiAssistant.SemanticKernel.Models;
 using VectorSearchAiAssistant.SemanticKernel.TextEmbedding;
 
 namespace VectorSearchAiAssistant.Service.Models.Search
