@@ -57,7 +57,11 @@ Semantic Kernel. There is a lot to cover!
 - Start by reading about [Azure Cosmos DB](https://learn.microsoft.com/azure/cosmos-db/), [Azure OpenAI](https://learn.microsoft.com/azure/cognitive-services/openai/overview), [Azure Cosmos DB partial document update (patch operation)](https://learn.microsoft.com/azure/cosmos-db/partial-document-update), and [Semantic Kernel](https://learn.microsoft.com/semantic-kernel/overview/).
 - Get your head around [prompt engineering](https://learn.microsoft.com/semantic-kernel/overview/) and [effective system prompts](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/system-message), which are both key to the hackathon.
 
-> Watch the [solution deep dive walkthrough video](https://www.dropbox.com/scl/fi/j339ai6kg8w6ztlpkq0p1/Payment-Transaction-Processing-deep-dive.mp4?rlkey=d2syl8xi4dalgvouukfznetmr&dl=0) to get a better understanding of the architecture, source code, and application flow. Please do not share this video with attendees.
+> Watch the [walkthrough video](https://aka.ms/TxProcessingWalkThroughVideo) to see the solution in action.
+
+> Watch the [solution deep dive walkthrough video](https://aka.ms/TxProcessingDeepDiveVideo) to get a better understanding of the architecture, source code, and application flow. Please do not share this video with attendees.
+
+> Use the [Deep Dive PowerPoint Presentation](./deep-dive/Real_Time_Payment_Trx_Processing_Solution_Deep_Dive.pptx) with included talk track to redeliver the deep dive video yourself.
 
 ### 2. Complete the Hackathon Challenges
 
