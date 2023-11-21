@@ -63,18 +63,18 @@ Services:
 - [Azure Cognitive Search](https://learn.microsoft.com/azure/search/)
 
 Concepts:
+
 - [Embeddings](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings)
 - [Prompt engineering](https://learn.microsoft.com/semantic-kernel/overview/)
 - [Effective system prompts](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/system-message)
 
+
 Most importantly, you need to fully understand the solution accelerator, what it does and how it works.
 
-- [Watch the Deep Dive Video](https://aka.ms/vsaia.deepdive) You may want to watch this video up through the installation section, then follow along for the remainder of the video as we go through the source code for this solution.
-- [Clone and get the solution setup and working](https://github.com/Azure/Vector-Search-AI-Assistant/tree/cognitive-search-vector) 
+> [Watch the Deep Dive Video](https://aka.ms/vsaia.deepdive) Watch this video up through the installation section, then follow along for the remainder of the video as we go through the source code for this solution. Then [Clone and get the solution setup and working](https://github.com/Azure/Vector-Search-AI-Assistant/tree/cognitive-search-vector) 
 
-There is also content which you can use to redeliver the deep dive video yourself including:
-- [Deep Dive PowerPoint Presentation](./deep-dive/Build_Modern_AI_Apps_Solution_Deep_Dive.pptx) and includes talk track
-- [Deep Dive Demo Script](./deep-dive/BuildModernAIAppsDeepDiveScript.docx) includes EVERYTHING else you need to deliver this session.
+
+> Use the [Deep Dive PowerPoint Presentation](./deep-dive/Build_Modern_AI_Apps_Solution_Deep_Dive.pptx) with included talk track and use with the [Deep Dive Demo Script](./deep-dive/BuildModernAIAppsDeepDiveScript.docx) that includes EVERYTHING else you need to walk through the Deep Dive content. You can even use this to deliver this session to customers **NOTE: you should not deliver this to customers before the hackathon.**
 
 ### 2. Complete the Hackathon Challenges
 
