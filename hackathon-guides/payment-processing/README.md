@@ -61,7 +61,7 @@ Semantic Kernel. There is a lot to cover!
 
 > Watch the [solution deep dive walkthrough video](https://aka.ms/TxProcessingDeepDiveVideo) to get a better understanding of the architecture, source code, and application flow. Please do not share this video with attendees.
 
-> Use the [Deep Dive PowerPoint Presentation](./deep-dive/Real_Time_Payment_Trx_Processing_Solution_Deep_Dive.pptx) with included talk track to redeliver the deep dive video yourself.
+> Use the [Deep Dive PowerPoint Presentation](./deep-dive/Real_Time_Payment_Trx_Processing_Solution_Deep_Dive.pptx) with included talk track to redeliver the deep dive video yourself. **NOTE: you should not deliver this to customers before the hackathon.**
 
 ### 2. Complete the Hackathon Challenges
 
